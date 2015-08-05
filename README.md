@@ -11,6 +11,9 @@ Once you decrypt it, tell me which pin switch02 is connected to.
 #### Observations
 * The sequence b7 ff aa b6 be a8 b1 b8 repeats itself a lot at the end of the file. 
 	* It's padded in some weird way.
+	* 8 bytes
+	* most likely padded with zeros, and then xor'd with an 8 byte key?
+
 * `hexdump -c | less` gives the below output, and it turns out you can buy a bluno nano device from DFRobot!
 
 ```
@@ -21,7 +24,21 @@ Once you decrypt it, tell me which pin switch02 is connected to.
 ```
 
 * Could be that data doesn't start until offset 000040
+* length of each file in bytes:
+	for f in *; do du -h $f; done
+	240K	SBL_BlEMEGA2560V1.94.bin
+	240K	SBL_BleMEGA1280V1.94.bin
+	240K	SBL_BlelinkV1.94.bin
+	240K	SBL_BlunoV1.94.bin
 
 #### Step 1: Convert .bin to .rar
 * [forensicswiki](http://forensicswiki.org/wiki/RAR) says rar file has magic number of `0x 52 61 72 21 1A 07 00`, but this is not found in the file.
 * probably need to figure out how to convert the file (minus padding) so that the code at offset 0000040 starts with the .rar magic number. Have no idea how to go about doing this.
+* Turns out robert gave me the wrong file.
+
+#### Step 1: trim the first 64 bytes
+
+#### Step 2: XOR with b7 ff aa b6 be a8 b1 b8
+
+0 xor 0 = 0
+0 xor 1 = 1
