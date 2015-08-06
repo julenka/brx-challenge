@@ -44,8 +44,8 @@ Once you decrypt it, tell me which pin switch02 is connected to.
 0 xor 0 = 0
 0 xor 1 = 1
 
-#### STUCK
-* still haven't compiled this into a file format that makes sense. The key is only 8 chars long so I could try 8 * 256 = 2,048 keys and see if any of them yield a file type.
+#### STUCK. Ideas
+* The key is only 8 chars long so I could try brute forcing...NEVERMIND BAD IDEA that will never finish.
 
 
 #### Reading bytes in python
