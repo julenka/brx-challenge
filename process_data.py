@@ -14,8 +14,8 @@ def get_outpath(out_dir, in_path):
     in_file = os.path.basename(in_path)
     return os.path.join(out_dir, in_file)
 
-def read_bytes(f):
-    result = array.array('c')
+def read_doubles(f):
+    result = array.array('L')
     while True:
         try:
             result.fromfile(f, 1000)
@@ -23,30 +23,25 @@ def read_bytes(f):
             break
     return result
 
-def trim_bytes(count, arr):
+def trim_doubles(count, arr):
     for _ in xrange(count):
         arr.pop(0)
     return arr
 
-def xor_bytes(byte_array, data_array):
-    result_array = array.array('c')
-    bit_i = 0
-    for data_byte in data_array:
-        xor_result = ord(data_byte) ^ byte_array[bit_i]
-        xor_result &= 0x000000ff
-        xor_result = chr(xor_result)
+def xor_bytes(to_xor, data_array):
+    result_array = array.array('L')
+    for data_double in data_array:
+        xor_result = data_double ^ to_xor
         result_array.append(xor_result)
-        bit_i += 1
-        bit_i %= len(byte_array)
     return result_array
 
 def process_file_path(out_dir, file_path):
     out_path = get_outpath(out_dir, file_path)
     with open(file_path) as in_file:
         with open(out_path, 'w') as out_file:
-            bts = read_bytes(in_file)
-            bts = trim_bytes(64, bts)
-            bts = xor_bytes([0xb7, 0xff, 0xaa, 0xb6, 0xbe, 0xa8, 0xb1, 0xb8], bts)
+            bts = read_doubles(in_file)
+            bts = trim_doubles(8, bts)
+            bts = xor_bytes(0xb8b1a8beb6aaffb7, bts)
             bts.tofile(out_file)
 
 def main():
