@@ -31,14 +31,31 @@ Once you decrypt it, tell me which pin switch02 is connected to.
 	240K	SBL_BlelinkV1.94.bin
 	240K	SBL_BlunoV1.94.bin
 
-#### Step 1: Convert .bin to .rar
+#### [DONE] Step 0: Convert .bin to .rar
 * [forensicswiki](http://forensicswiki.org/wiki/RAR) says rar file has magic number of `0x 52 61 72 21 1A 07 00`, but this is not found in the file.
 * probably need to figure out how to convert the file (minus padding) so that the code at offset 0000040 starts with the .rar magic number. Have no idea how to go about doing this.
 * Turns out robert gave me the wrong file.
 
-#### Step 1: trim the first 64 bytes
+#### [DONE] Step 1: trim the first 64 bytes
+* Also tried trimming first 208 bytes since data actually repeated until then
 
-#### Step 2: XOR with b7 ff aa b6 be a8 b1 b8
+#### [DONE] Step 2: XOR with b7 ff aa b6 be a8 b1 b8
 
 0 xor 0 = 0
 0 xor 1 = 1
+
+#### STUCK
+* still haven't compiled this into a file format that makes sense. The key is only 8 chars long so I could try 8 * 256 = 2,048 keys and see if any of them yield a file type.
+
+
+#### Reading bytes in python
+```
+result = array.array('l')
+while True:
+	try:
+		result.fromfile(f, 1000)
+	except EOFError:
+		break
+```
+
+* 'l' typecode is 8 bytes long, use 'c' typecode instead
