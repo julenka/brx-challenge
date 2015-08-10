@@ -44,9 +44,17 @@ Once you decrypt it, tell me which pin switch02 is connected to.
 0 xor 0 = 0
 0 xor 1 = 1
 
-#### STUCK
-* still haven't compiled this into a file format that makes sense. The key is only 8 chars long so I could try 8 * 256 = 2,048 keys and see if any of them yield a file type.
+#### [DONE] Step 3: XOR with ~ (b7 ff aa b6 be a8 b1 b8) to get padding to be ones
 
+#### Step 4: Get ASCII
+
+`for f in decrypted/*; do strings $f; done`
+
+Then find the stuff that looks like "switch 2" and copy only those lines
+
+#### Step 5: Unscramble resulting ASCII
+
+`unscramble.py strings_scrambled.txt`
 
 #### Reading bytes in python
 ```
