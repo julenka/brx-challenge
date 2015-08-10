@@ -32,7 +32,7 @@ def xor_bytes(byte_array, data_array):
     result_array = array.array('c')
     bit_i = 0
     for data_byte in data_array:
-        xor_result = ord(data_byte) ^ byte_array[bit_i]
+        xor_result = ~(ord(data_byte) ^ byte_array[bit_i])
         xor_result &= 0x000000ff
         xor_result = chr(xor_result)
         result_array.append(xor_result)
@@ -56,7 +56,8 @@ def main():
     file_paths = sys.argv[1:]
     out_dir = get_outdir()
     for file_path in file_paths:
-        process_file_path(out_dir,file_path)
+        process_file_path(out_dir, file_path)
+    print out_dir
 
 if __name__ == '__main__':
     main()
